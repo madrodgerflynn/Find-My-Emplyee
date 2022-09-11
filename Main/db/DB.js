@@ -4,13 +4,7 @@ class DB {
   constructor(connection) {
     this.connection = connection;
   }
-  buildNameQuestion() {
-    return {
-      message: "What is the Employee's First Name?",
-      name: "f_name",
-      type: "input",
-    };
-  }
+
   async promptEmployee() {
     // let roleQuestion = await this.buildRoleChoices();
     // let departmentQuestion = await this.buildDepartmentQuestion();
@@ -28,11 +22,32 @@ class DB {
       message: "What would you like to do?",
       name: "basicChoice",
       type: "list",
-      choices: [{ name: "Add an Employee", value: "addEmployee" }],
+      choices: [
+        {
+          name: "Add an Employee",
+          value: "addEmployee",
+        },
+        {
+          name: "View all Departments",
+          value: "allDepts",
+          //need to call a fx to view depts?
+        },
+        {
+          name: "View all Roles",
+          value: "allRoles",
+        },
+        {
+          name: "View all Employess",
+          value: "allEmps",
+        },
+      ],
     });
     console.log(selectedOption);
     if (selectedOption.basicChoice === "addEmployee") {
       await this.addEmployee();
+    }
+    if (selectedOption.basicChoice === "allDepts") {
+      await this.allDepts();
     }
   }
   async addEmployee() {
@@ -48,15 +63,21 @@ class DB {
         name: "l_name",
         type: "input",
       },
+    ];
+    await inquirer.prompt(questions);
+  }
+  async allDepts() {
+    const deptChoices = await this.buildDepartmentChoices();
+    const questions = [
       {
         message: "Please choose the Employees' role?",
         name: "emp_role",
         type: "list",
-        choices: roleChoices,
+        choices: deptChoices,
       },
     ];
-    await inquirer.prompt(questions);
   }
+
   async buildDepartmentChoices() {
     let depts = await new Promise((resolve, reject) => {
       this.connection.query("SELECT * FROM department", (err, rows) => {
