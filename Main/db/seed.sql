@@ -1,6 +1,6 @@
 REPLACE INTO department (name)
 VALUES 
-    ( "Advertising"),
+    ( "Management"),
     ( "Sales"),
     ( "Research and Developement"),
     ( "Accounting");
@@ -11,7 +11,7 @@ VALUES
     (1, "Manager", 100000, 1),
     (2, "Engineer", 50000, 3),
     (3, "Salesperson", 100000, 2),
-    (4, "Receptionist",50000, 4);
+    (4, "Accountant",50000, 4);
 
 
 REPLACE INTO employee (id, first_name, last_name, role_id, manager_id)

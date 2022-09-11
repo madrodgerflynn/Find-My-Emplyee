@@ -42,16 +42,22 @@ class DB {
         },
       ],
     });
-    console.log(selectedOption);
+    // console.log(selectedOption);
     if (selectedOption.basicChoice === "addEmployee") {
       await this.addEmployee();
     }
     if (selectedOption.basicChoice === "allDepts") {
       await this.allDepts();
     }
+    if (selectedOption.basicChoice === "allRoles") {
+      await this.allRoles();
+    }
+    if (selectedOption.basicChoice === "allEmps") {
+      await this.allEmps();
+    }
   }
   async addEmployee() {
-    const roleChoices = await this.buildRoleChoices();
+    const nameChoices = await this.buildRoleChoices();
     const questions = [
       {
         message: "What is the Employee's First Name?",
@@ -65,17 +71,8 @@ class DB {
       },
     ];
     await inquirer.prompt(questions);
-  }
-  async allDepts() {
-    const deptChoices = await this.buildDepartmentChoices();
-    const questions = [
-      {
-        message: "Please choose the Employees' role?",
-        name: "emp_role",
-        type: "list",
-        choices: deptChoices,
-      },
-    ];
+    //  needs to store the user input into the employee DB
+    console.log();
   }
 
   async buildDepartmentChoices() {
@@ -91,6 +88,20 @@ class DB {
       names.push({ name: depts[i].name, value: depts[i].id });
     }
     return names;
+    // console.log(names);
+  }
+  async allDepts() {
+    const deptChoices = await this.buildDepartmentChoices();
+    const questions = [
+      {
+        message: "Please choose the Employees' department?",
+        name: "depts",
+        type: "list",
+        choices: deptChoices,
+      },
+    ];
+    return this.promptEmployee();
+    // console.log(this.allDepts);
   }
   async buildRoleChoices() {
     let roles = await new Promise((resolve, reject) => {
@@ -105,6 +116,18 @@ class DB {
       emp_role.push({ name: roles[i].title, value: roles[i].id });
     }
     return emp_role;
+  }
+  async allRoles() {
+    const roleChoices = await this.buildRoleChoices();
+    const questions = [
+      {
+        message: "Please choose a role",
+        name: "role",
+        type: "list",
+        choices: roleChoices,
+      },
+    ];
+    return this.promptEmployee();
   }
 
   saveEmployee(employee) {
