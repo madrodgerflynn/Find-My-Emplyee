@@ -28,7 +28,7 @@ class DB {
       message: "What would you like to do?",
       name: "basicChoice",
       type: "list",
-      choices: [{ name: "Add and Employee", value: "addEmployee" }],
+      choices: [{ name: "Add an Employee", value: "addEmployee" }],
     });
     console.log(selectedOption);
     if (selectedOption.basicChoice === "addEmployee") {
@@ -53,11 +53,6 @@ class DB {
         name: "emp_role",
         type: "list",
         choices: roleChoices,
-      },
-      {
-        message: "Please enter the salary of the Employee",
-        name: "slary",
-        type: "input",
       },
     ];
     await inquirer.prompt(questions);
