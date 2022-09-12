@@ -59,86 +59,106 @@ class DB {
 
   async addEmployee() {
     const nameChoices = await this.questions;
+    const roleChoices = (await this.buildRoleChoices()).map((role) => ({
+      name: role.title,
+      value: role.id,
+    }));
+    const managerChoices = (await this.buildManagerChoices()).map(
+      (manager) => ({
+        name: manager.first_name + " " + manager.last_name,
+        value: manager.id,
+      })
+    );
+    managerChoices.push({ name: "none", value: null });
+
     const questions = [
       {
         message: "What is the Employee's First Name?",
-        name: "f_name",
+        name: "first_name",
         type: "input",
       },
       {
         message: "What is the Employee's Last Name?",
-        name: "l_name",
+        name: "last_name",
         type: "input",
       },
+      {
+        message: "What is the Employees Role?",
+        name: "role_id",
+        type: "list",
+        choices: roleChoices,
+      },
+      {
+        message: "What is the Manager's Name?",
+        name: "manager_id",
+        type: "list",
+        choices: managerChoices,
+      },
     ];
-    await inquirer.prompt(questions);
+    this.connection.query(
+      `INSERT INTO employee SET ?`,
+      await inquirer.prompt(questions)
+    );
+
+    // let names = [];
+    // for (let i = 0; i < depts.length; i++) {
+    //   names.push({ name: depts[i].name, value: depts[i].id });
+    // }
+
     return this.promptEmployee();
     //  needs to store the user input into the employee DB
   }
 
-  saveEmployee() {
-    connection.query(
-      `INSERT INTO employee VALUES (default, "${f_name}", "${l_name}", "${emp_role}", "${mang_id}")`
-    );
+  saveEmployee() {}
+  async buildManagerChoices() {
+    let man_id = await new Promise((resolve, reject) => {
+      this.connection.query("SELECT * FROM employee", (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows);
+      });
+    });
+    return man_id;
   }
 
+  // let names = [];
+  // for (let i = 0; i < depts.length; i++) {
+  //   names.push({ name: depts[i].name, value: depts[i].id });
+  // }
   async buildDepartmentChoices() {
     let depts = await new Promise((resolve, reject) => {
       this.connection.query("SELECT * FROM department", (err, rows) => {
         if (err) return reject(err);
-        console.log(rows);
+
         resolve(rows);
       });
     });
-    let names = [];
-    for (let i = 0; i < depts.length; i++) {
-      names.push({ name: depts[i].name, value: depts[i].id });
-    }
-    return names;
-    // console.log(names);
+    return depts;
   }
   async allDepts() {
     const deptChoices = await this.buildDepartmentChoices();
-    // const questions = [
-    //   {
-    //     message: "Please choose the Employees' department?",
-    //     name: "depts",
-    //     type: "list",
-    //     choices: deptChoices,
-    //   },
-    // ];
+    console.log(deptChoices);
     return this.promptEmployee();
-    // console.log(this.allDepts);
   }
   async buildRoleChoices() {
     let roles = await new Promise((resolve, reject) => {
       this.connection.query("SELECT * FROM role", (err, rows) => {
         if (err) return reject(err);
-        console.log(rows);
+
         resolve(rows);
       });
     });
-    let emp_role = [];
-    for (let i = 0; i < roles.length; i++) {
-      emp_role.push({ name: roles[i].title, value: roles[i].id });
-    }
-    return emp_role;
+
+    // let emp_role = [];
+    // for (let i = 0; i < roles.length; i++) {
+    //   emp_role.push({ name: roles[i].title, value: roles[i].id });
+    // }
+    return roles;
   }
   async allRoles() {
     const roleChoices = await this.buildRoleChoices();
-    const questions = [
-      {
-        message: "Please choose a role",
-        name: "role",
-        type: "list",
-        choices: roleChoices,
-      },
-    ];
+    console.log(roleChoices);
     return this.promptEmployee();
   }
-  //   async allEmps() {
-  //    const viewEmps = await this.
-  //  }
 
   async viewAllEmployees() {
     let allEmployees = await new Promise((resolve, reject) => {
