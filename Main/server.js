@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
 });
 
 let db = new DB(connection);
-console.log(DB);
+
 const init = async () => {
   await db.promptEmployee();
 };

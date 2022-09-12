@@ -56,8 +56,9 @@ class DB {
       await this.allEmps();
     }
   }
+
   async addEmployee() {
-    const nameChoices = await this.buildRoleChoices();
+    const nameChoices = await this.questions;
     const questions = [
       {
         message: "What is the Employee's First Name?",
@@ -72,7 +73,13 @@ class DB {
     ];
     await inquirer.prompt(questions);
     //  needs to store the user input into the employee DB
-    console.log();
+    return this.promptEmployee;
+  }
+
+  saveEmployee() {
+    connection.query(
+      `INSERT INTO employee VALUES (default, "${f_name}", "${l_name}", "${emp_role}", "${mang_id}")`
+    );
   }
 
   async buildDepartmentChoices() {
@@ -129,11 +136,28 @@ class DB {
     ];
     return this.promptEmployee();
   }
+  //   async allEmps() {
+  //    const viewEmps = await this.
+  //  }
 
-  saveEmployee(employee) {
-    connection.query(
-      `INSERT INTO employee VALUES (default, "${f_name}", "${l_name}", "${emp_role}", "${mang_id}")`
-    );
+  async viewAllEmployees() {
+    let allEmps = await new Promise((resolve, reject) => {
+      this.connection.query("SELECT * FROM employee", (err, rows) => {
+        if (err) return reject(err);
+        console.log(rows);
+        resolve(rows);
+      });
+    });
+    let emps = [];
+    for (let i = 0; i < allEmps.length; i++) {
+      emps.push({
+        name: allEmps[i].f_name,
+        value: allEmps[i].first_name,
+        name: allEmps[i].l_name,
+        value: [i].last_name,
+      });
+    }
+    return emp_role;
   }
 }
 module.exports = DB;

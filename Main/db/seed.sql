@@ -19,3 +19,6 @@ VALUES
   (1, "Jimbo", "Kern", 1, NULL), 
   (2, "Sam", "Neil", 4, 1),
   (3, "Colista", "Flockhart", 2, 1);
+
+--  INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
+    
