@@ -53,7 +53,7 @@ class DB {
       await this.allRoles();
     }
     if (selectedOption.basicChoice === "allEmps") {
-      await this.allEmps();
+      await this.viewAllEmployees();
     }
   }
 
@@ -72,8 +72,8 @@ class DB {
       },
     ];
     await inquirer.prompt(questions);
+    return this.promptEmployee();
     //  needs to store the user input into the employee DB
-    return this.promptEmployee;
   }
 
   saveEmployee() {
@@ -141,7 +141,7 @@ class DB {
   //  }
 
   async viewAllEmployees() {
-    let allEmps = await new Promise((resolve, reject) => {
+    let allEmployees = await new Promise((resolve, reject) => {
       this.connection.query("SELECT * FROM employee", (err, rows) => {
         if (err) return reject(err);
         console.log(rows);
@@ -149,15 +149,15 @@ class DB {
       });
     });
     let emps = [];
-    for (let i = 0; i < allEmps.length; i++) {
+    for (let i = 0; i < allEmployees.length; i++) {
       emps.push({
-        name: allEmps[i].f_name,
-        value: allEmps[i].first_name,
-        name: allEmps[i].l_name,
-        value: [i].last_name,
+        name: allEmployees[i].f_name,
+        value: allEmployees[i].first_name,
+        name: allEmployees[i].l_name,
+        value: allEmployees[i].last_name,
       });
     }
-    return emp_role;
+    return this.promptEmployee();
   }
 }
 module.exports = DB;
