@@ -99,14 +99,14 @@ class DB {
   }
   async allDepts() {
     const deptChoices = await this.buildDepartmentChoices();
-    const questions = [
-      {
-        message: "Please choose the Employees' department?",
-        name: "depts",
-        type: "list",
-        choices: deptChoices,
-      },
-    ];
+    // const questions = [
+    //   {
+    //     message: "Please choose the Employees' department?",
+    //     name: "depts",
+    //     type: "list",
+    //     choices: deptChoices,
+    //   },
+    // ];
     return this.promptEmployee();
     // console.log(this.allDepts);
   }
@@ -149,14 +149,7 @@ class DB {
       });
     });
     let emps = [];
-    for (let i = 0; i < allEmployees.length; i++) {
-      emps.push({
-        name: allEmployees[i].f_name,
-        value: allEmployees[i].first_name,
-        name: allEmployees[i].l_name,
-        value: allEmployees[i].last_name,
-      });
-    }
+
     return this.promptEmployee();
   }
 }
