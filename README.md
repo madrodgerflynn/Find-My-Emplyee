@@ -45,9 +45,7 @@ None
 
 ---
 
-For any questions about this project, contact me directly at madrodgerflynn@gmail.com You can find more of my work on my Github @ [madrodgerflynn](https://github.com/madrodgerflynn).
-
----
+## For any questions about this project, contact me directly at madrodgerflynn@gmail.com You can find more of my work on my Github @ [madrodgerflynn](https://github.com/madrodgerflynn).
 
 ## Images
 
