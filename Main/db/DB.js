@@ -36,6 +36,10 @@ class DB {
           value: "allEmps",
         },
         {
+          name: "Update Employee",
+          value: "update_emp",
+        },
+        {
           name: "Exit",
           value: "exit",
         },
@@ -60,6 +64,9 @@ class DB {
     if (selectedOption.basicChoice === "addRole") {
       await this.addRole();
     }
+    if (selectedOption.basicChoice === "update_emp") {
+      await this.updateEmployee();
+    }
     if (selectedOption.basicChoice === "exit") {
       await this.exit();
     }
@@ -70,10 +77,6 @@ class DB {
 
   async addRole() {
     const roleChoices = await this.questions;
-    // const roleQuestions = (await this.buildRoleChoices()).map((role) => ({
-    //   name: role.title,
-    //   value: role.id,
-    // }));
 
     const questions = [
       {
@@ -216,6 +219,55 @@ class DB {
     let emps = [];
 
     return this.promptEmployee();
+  }
+  async getEmployeeList() {
+    let employee = await new Promise((resolve, reject) => {
+      this.connection.query("SELECT * FROM employee", (err, rows) => {
+        if (err) return reject(err);
+        console.table(rows);
+        resolve(rows);
+      });
+    });
+
+    return employee;
+  }
+  async updateEmployee() {
+    const allEmployees = (await this.getEmployeeList()).map((employee) => ({
+      name: employee.first_name,
+      value: employee.id,
+    }));
+    const allRoles = (await this.buildRoleChoices()).map((role) => ({
+      name: role.title,
+      value: role.id,
+    }));
+
+    const questions = [
+      {
+        message: "Which employee would you like to update?",
+        name: "all_emps",
+        type: "list",
+        choices: allEmployees,
+      },
+      {
+        message: "What would you like their new role to be",
+        name: "role_change",
+        type: "list",
+        choices: allRoles,
+      },
+    ];
+
+    inquirer.prompt(questions).then((response) => {
+      console.log(response);
+      const id = response.all_emps;
+      const newRole = response.role_change;
+      this.connection.query(
+        `UPDATE employee SET role_id = ? WHERE id = ?`,
+        [newRole, id],
+        (err, rows) => {
+          return this.promptEmployee();
+        }
+      );
+    });
   }
 }
 module.exports = DB;
