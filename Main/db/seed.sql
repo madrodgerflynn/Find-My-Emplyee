@@ -1,6 +1,6 @@
 REPLACE INTO department (name)
 VALUES 
-    ( "Management"),
+    ( "Production"),
     ( "Sales"),
     ( "Research and Developement"),
     ( "Accounting");
@@ -8,7 +8,7 @@ VALUES
 
 REPLACE INTO role (id, title, salary, department_id)
 VALUES
-    (1, "Manager", 100000, 1),
+    (1, "Intern", 100, 1),
     (2, "Engineer", 50000, 3),
     (3, "Salesperson", 100000, 2),
     (4, "Accountant",50000, 4);
@@ -20,5 +20,4 @@ VALUES
   (2, "Sam", "Neil", 4, 1),
   (3, "Colista", "Flockhart", 2, 1);
 
---  INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
     
